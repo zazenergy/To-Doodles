@@ -1,0 +1,26 @@
+<h1> All tasks for <%= @list.name %> list </h1>
+
+<%= form_tag complete_tasks_path, :method => :put do %>
+	<!-- Pass the List id so TaskController's complete action knows which List to redirect back to again -->
+	<%= hidden_field_tag :list_id, :list_id => @list.id %>
+	<% for task in @list.tasks %>
+		<!-- In order to capture all the tasks, you have to stick a "[]" after task_id -->
+		<p><%= check_box_tag "task_ids[]", task.id %> <%= task.description %></p>
+	<% end %>
+	<%= submit_tag "Cross Off List" %>
+<% end %>
+
+
+<%= form_for(@task) do |task| %>
+	<!-- Adding a hidden attribute to recognize the associated list_id with the task being submitted -->	
+	<%= task.hidden_field :list_id %>
+	<p>
+		<%= task.label :new_task %><br />
+		<%= task.text_field :description %>		
+	</p>
+	<p> 
+		<%= task.submit %>
+	</p>
+<% end %>
+
+<%= link_to 'Delete this list', @list, :method => :delete, :confirm => "Are you sure?" %> 
